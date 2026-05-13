@@ -15,7 +15,7 @@ end
     parallel can cause all kinds of trouble.
 
     If you need to have string first in your PATH, run:
-      echo 'export PATH="#{HOMEBREW_PREFIX}/opt/string/bin:$PATH"' >> ${ZDOTDIR:-$HOME}/.zshrc
+      echo 'export PATH="#{HOMEBREW_PREFIX}/opt/string-cli/bin:$PATH"' >> ${ZDOTDIR:-$HOME}/.zshrc
   EOS
 
   def install

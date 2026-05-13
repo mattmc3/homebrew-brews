@@ -3,9 +3,9 @@
 Update Homebrew formula versions and SHA256 checksums.
 
 Usage:
-  update-formula                  # Update all formulas
-  update-formula string           # Update specific formula
-  update-formula string v1.2.3    # Update formula to a specific version
+  update-formula                      # Update all formulas
+  update-formula string-cli           # Update specific formula
+  update-formula string-cli v1.2.3    # Update formula to a specific version
 """
 
 import hashlib, json, re, sys, urllib.request
