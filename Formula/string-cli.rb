@@ -1,4 +1,4 @@
-class StringUtil < Formula
+class StringCli < Formula
   desc "Fish shell's string utility for any shell"
   homepage "https://github.com/mattmc3/string"
   version "0.0.3"
