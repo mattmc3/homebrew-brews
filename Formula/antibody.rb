@@ -11,6 +11,7 @@ class Antibody < Formula
   def install
     ldflags = ["-s", "-w", "-X main.version=#{version}"]
     system "go", "build", *std_go_args(ldflags: ldflags), "./"
+    generate_completions_from_executable(bin/"antibody", "completions", shells: [:zsh])
   end
 
   test do
