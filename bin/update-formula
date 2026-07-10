@@ -8,7 +8,7 @@ Usage:
   update-formula string-cli v1.2.3    # Update formula to a specific version
 """
 
-import hashlib, json, re, sys, urllib.request
+import hashlib, json, os, re, sys, urllib.request
 from pathlib import Path
 
 FORMULA_DIR = Path(__file__).parent.parent / "Formula"
@@ -23,7 +23,11 @@ def github_repo(url):
     return m.group(1).removesuffix(".git") if m else None
 
 def latest_tag(repo):
-    with urllib.request.urlopen(f"https://api.github.com/repos/{repo}/tags") as r:
+    # authenticated requests avoid the 60/hr shared rate limit on CI runners
+    req = urllib.request.Request(f"https://api.github.com/repos/{repo}/tags")
+    if token := os.environ.get("GITHUB_TOKEN"):
+        req.add_header("Authorization", f"Bearer {token}")
+    with urllib.request.urlopen(req) as r:
         tags = json.loads(r.read())
     return tags[0]["name"] if tags else None
 
@@ -44,7 +48,7 @@ def update_formula(path, new_version=None):
 
     version = new_version or latest_tag(repo)
     if not version:
-        err("Could not determine version"); return False
+        print("  Skipping: repo has no tags"); return True
     ver = version.lstrip("v")
     print(f"  Version: {ver}")
 
@@ -55,6 +59,8 @@ def update_formula(path, new_version=None):
     if "#{version}" in url_m.group(1):
         content = re.sub(r'version\s+"[^"]+"', f'version "{ver}"', content)
         arm_m = re.search(r'on_arm\b.*?url\s+"([^"]+)"', content, re.DOTALL)
+        if not arm_m:
+            err("versioned url but no on_arm block"); return False
         arm_url = arm_m.group(1).replace("#{version}", ver)
         sha = sha256_url(arm_url)
         print(f"  ARM64 SHA256: {sha}")
