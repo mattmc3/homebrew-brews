@@ -1,8 +1,8 @@
 class Antibody < Formula
   desc "The fastest shell plugin manager"
   homepage "https://github.com/mattmc3/antibody"
-  url "https://github.com/mattmc3/antibody/archive/refs/tags/v7.0.0.tar.gz"
-  sha256 "7008da0ba5b040abfcd7724882b54174e454f78bbc66cdffe5cea6ccf3e0fb79"
+  url "https://github.com/mattmc3/antibody/archive/refs/tags/v7.0.1.tar.gz"
+  sha256 "068b3a6535059313bfa3cd67b2bdf73d1c63e3ea521dfc9f39326b3db00d94f6"
   head "https://github.com/mattmc3/antibody.git", branch: "main"
   license "MIT"
 
