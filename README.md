@@ -12,30 +12,13 @@ brew install pather
 
 ## Updating Formulas
 
-### Local Script
-
-The included helper script updates formulas. The script uses the `homepage` field to determine the GitHub repo and constructs the appropriate tarball URL:
-
-```sh
-# Update all formulas to latest tags
-bin/update-formula
-
-# Update specific formula to latest tag
-bin/update-formula prj
-
-# Update formula to a specific version
-bin/update-formula prj v1.0.2
-```
-
-The script will:
-- Extract the GitHub repo from the `homepage` field
-- Use the specified version, or fetch the latest tag if no version is provided
-- Download the tarball and calculate SHA256
-- Update both `url` and `sha256` fields in the formula
+Formulas are kept current by [brew-bumper](https://github.com/mattmc3/brew-bumper), which reads the
+`homepage` field to find the upstream repo, resolves the newest tag, downloads the artifact and
+rewrites the `url` and `sha256`.
 
 ### GitHub Actions
 
-Automatically update formulas via GitHub Actions:
+The **Update Formulas** workflow runs nightly. To trigger it by hand:
 
 1. Go to the **Actions** tab in this repository
 2. Select **Update Formulas** workflow
@@ -44,7 +27,24 @@ Automatically update formulas via GitHub Actions:
    - Leave formula field empty to update all formulas
    - Or enter a specific formula name like `prj`
    - Optionally specify a version tag to update to a new release
-5. The workflow constructs URLs from the homepage, downloads tarballs, and updates both URL and SHA256
+
+### Local
+
+brew-bumper also runs as a plain CLI:
+
+```sh
+# Update all formulas to latest tags
+brew_bumper.rb
+
+# Update specific formula to latest tag
+brew_bumper.rb prj
+
+# Update formula to a specific version
+brew_bumper.rb prj v1.0.2
+
+# Preview without writing
+brew_bumper.rb --dry-run
+```
 
 ### Manual
 

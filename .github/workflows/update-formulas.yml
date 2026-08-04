@@ -25,29 +25,13 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Update formulas
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            # Update specific formula to new version
-            bin/update-formula "${{ github.event.inputs.formula }}" "${{ github.event.inputs.version }}"
-          elif [ -n "${{ github.event.inputs.formula }}" ]; then
-            # Update specific formula
-            bin/update-formula "${{ github.event.inputs.formula }}"
-          else
-            # Update all formulas
-            bin/update-formula
-          fi
+        id: bump
+        uses: mattmc3/brew-bumper@v1
+        with:
+          formula: ${{ inputs.formula }}
+          version: ${{ inputs.version }}
+          commit: 'true'
 
-      - name: Commit and push changes
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          if git diff --quiet Formula/; then
-            echo "No changes to commit"
-          else
-            git add Formula/*.rb
-            git commit -m "Update formulas"
-            git push
-          fi
+      - name: Push changes
+        if: steps.bump.outputs.changed == 'true'
+        run: git push
