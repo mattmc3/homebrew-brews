@@ -7,7 +7,7 @@ class StringCli < Formula
   on_arm do
     url "https://github.com/mattmc3/string/releases/download/v#{version}/string-#{version}-osx-arm64.tar.gz"
     sha256 "ec4fd527838d360971af14eeb49d033bcd788faadb558e121222735d8aa7c38d"
-end
+  end
 
   keg_only <<~EOS
     this formula is keg-only, which means it was not symlinked into #{HOMEBREW_PREFIX},
